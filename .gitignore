@@ -1,1 +1,7 @@
-landretrive\inter
+Data_Files
+Data_Processing
+prototype
+.env
+Backend/.env
+Frontend/node_modules
+Frontend/.vscode

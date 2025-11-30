@@ -1,0 +1,138 @@
+<div class="property-search">
+  <div class="search-card">
+    <h2 class="title">Telangana Property Search</h2>
+    <p class="subtitle">
+      Search by district, mandal, village and survey number
+    </p>
+
+    <form (ngSubmit)="onSearch()" class="form-grid">
+      <div class="form-field">
+        <label for="district_name">District</label>
+        <input
+          id="district"
+          type="text"
+          [(ngModel)]="district_name"
+          name="district_name"
+          placeholder="Adilabad"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="mandal_name">Mandal</label>
+        <input
+          id="mandal"
+          type="text"
+          [(ngModel)]="mandal_name"
+          name="mandal_name"
+          placeholder="Adilabad (Rural)"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="village_name">Village</label>
+        <input
+          id="village"
+          type="text"
+          [(ngModel)]="village_name"
+          name="village_name"
+          placeholder="Ankapoor"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="survey_no">Survey No</label>
+        <input
+          id="surveyNo"
+          type="text"
+          [(ngModel)]="survey_no"
+          name="survey_no"
+          placeholder="2/2"
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="loading">
+          <span *ngIf="!loading">Search</span>
+          <span *ngIf="loading" class="spinner"></span>
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="errorMsg" class="alert alert-error">
+      {{ errorMsg }}
+    </div>
+  </div>
+
+
+  <div *ngIf="results && results.length" class="results-wrapper">
+
+
+    <div class="results-list">
+      <div *ngFor="let p of results" class="result-card">
+        <div class="result-header">
+          <div class="location-line">
+            <span class="chip">{{ p.district_name }}</span>
+            <span class="chip">{{ p.mandal_name }}</span>
+            <span class="chip">{{ p.village_name }}</span>
+          </div>
+          <div class="survey-line">
+            Survey: <strong>{{ p.survey_no }}</strong>
+            <span class="divider">|</span>
+            Khata: <strong>{{ p.khata_id || '—' }}</strong>
+          </div>
+        </div>
+
+        <div class="result-body">
+          <div class="field">
+            <span class="label">Pattadar</span>
+            <span class="value">{{ p.pattadar_name_en }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Father / Husband</span>
+            <span class="value">{{ p.father_or_husband_name_en }}</span>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <span class="label">Extent (Acres)</span>
+              <span class="value">{{ p.total_extent_ac_gts }}</span>
+            </div>
+            <div class="field">
+              <span class="label">Land Type</span>
+              <span class="value">{{ p.land_type }}</span>
+            </div>
+            <div class="field">
+              <span class="label">Status</span>
+              <span
+                class="badge"
+                [ngClass]="p.land_status === 'Signed' ? 'badge-success' : 'badge-warning'"
+              >
+                {{ p.land_status }}
+              </span>
+            </div>
+          </div>
+
+          <div class="field highlight">
+            <span class="label">Market Value</span>
+            <span class="value value-money">
+              ₹ {{ p.market_value_inr | number: '1.0-0' }}
+            </span>
+          </div>
+
+          <div class="meta-line">
+            <span>PPB: {{ p.ppb_number }}</span>
+            <span class="dot">•</span>
+            <span>eKYC: {{ p.ekyc_status }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!loading && (!results || !results.length) && !errorMsg"
+    class="empty-state"
+  >
+    Enter details above and click <strong>Search</strong> to see properties.
+  </div>
+</div>
